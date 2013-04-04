@@ -1,0 +1,118 @@
+<figure>
+    <img src= "../public/img/animaux.png"  alt="Image chien malade" height="100">
+</figure>
+
+<?php
+$this->title = 'Les Animaux';
+$this->headTitle($this->title);
+?>
+
+<?php
+$this->tabContainer()->captureStart('tabcontainer', array(), array());
+$this->contentPane()->captureStart('tab1', array(), array('title' => 'Les animaux'));
+?>
+<p><a href="<?php
+echo $this->url(array('controller' => 'animaux',
+    'action' => 'ajouter'));
+?>">Ajouter un nouvel Animal</a></p>
+
+
+<!--<form action="postIt" id="myform">-->
+
+<script type="text/javascript" >    
+    var structure = [ 
+        { field: 'idPersonne', name : 'Num propriétaire', width: '100px' },
+        { field: 'nomPersonne', name : 'Nom propriétaire', width: '100px' },
+        { field: 'prenomAnimal', name : 'Nom', width: '100px' },
+        { field: 'dateNaissanceAnimal', name : 'Date naissance', width: '100px'},
+        { field: 'type', name : 'Type', width: '100px'}
+    ]; 
+</script>
+
+
+<!--<th>Nom</th>
+        <th>Prenom</th>
+        <th>Date naissance</th>
+        <th>phone</th>
+        <th>&nbsp;</th>-->
+
+<span dojoType="dojox.data.QueryReadStore" jsId="idpersonne" url="/v_esp/public/animaux/indexjson"></span>
+<div id="grid1" data-dojo-id="grid2" dojoType="dojox.grid.DataGrid" 
+     data-dojo-props="store:idpersonne,
+     structure:'structure'  ,
+     clientSort:true,
+     rowSelector:'20px'"
+     style=" height: 260px;"></div>
+
+<div data-dojo-type="dijit/form/Form" id="modifier" data-dojo-id="myForm"
+     encType="multipart/form-data" action="animaux/modifier" method="GET">
+    <script type="dojo/on" data-dojo-event="submit">
+        dojo.require("dojo.NodeList-manipulate");
+        var items = grid2.selection.getSelected();
+        if(items.length){            
+            dojo.forEach(items, function(selectedItem){
+                if(selectedItem !== null){
+                    attribute = 'idAnimal';
+                    var value = grid2.store.getValues(selectedItem, attribute);                    
+                    var idAnimal = dojo.query("#idAnimalM").val(value);
+                } 
+            }); 
+        }
+    </script>
+
+    <input type="hidden" id="idAnimalM" name="idAnimalM"  value="" />
+    <button data-dojo-type="dijit/form/Button"             
+            type="submit" >
+        Modifier
+    </button>
+
+    <button data-dojo-type="dijit/form/Button"             
+            type="button">
+        Supprimer
+        <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+            require(["dijit/registry"], function(registry){
+            registry.byId("dialog").show();
+            });
+        </script>
+    </button>
+
+    <div id="dialog" title="Suppression" data-dojo-id="dialog" data-dojo-type="dijit/Dialog">
+        <script type="dojo/on" data-dojo-event="show">            
+            dojo.require("dojo.NodeList-manipulate");
+            var items = grid2.selection.getSelected();
+            if(items.length){            
+                dojo.forEach(items, function(selectedItem){
+                    if(selectedItem !== null){
+                        var idAnimal = grid2.store.getValues(selectedItem, 'idAnimal');
+                        dojo.query("#idAnimalS").val(idAnimal);
+                        var prenomAnimal = grid2.store.getValues(selectedItem, 'prenomAnimal');
+                        var detaille = idAnimal+ ' ' +prenomAnimal+ ' ';
+                        dojo.query("#detaille").html(detaille);                      
+                    } 
+                });
+            }
+        </script>
+        <p>Êtes-vous sûr de vouloir supprimer <div id="detaille"></div>
+        </p>
+        <form action="<?php echo $this->url(array('action' => 'supprimer')); ?>" method="post">
+            <div>
+                <input type="hidden" id ="idAnimalS" name="idAnimalS" value="" />
+                <button data-dojo-type="dijit/form/Button"  type="submit" name="supprimer" value="Oui">
+                    Oui
+                </button>
+                <button data-dojo-type="dijit/form/Button" 
+                        type="button" data-dojo-props="onClick:function(){dialog.hide();}"
+                        id="cancel" >Non</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<?php
+echo $this->contentPane()->captureEnd('tab1');
+echo $this->tabContainer()->captureEnd('tabcontainer');
+?>
+
+
+

@@ -1,0 +1,107 @@
+<?php
+$this->title = 'Les Cliniques';
+$this->headTitle($this->title);
+?>
+
+<?php
+$this->tabContainer()->captureStart('tabcontainer', array(), array());
+$this->contentPane()->captureStart('tab1', array(), array('title' => 'Les cliniques'));
+?>
+<p><a href="<?php
+echo $this->url(array('controller' => 'clinique',
+    'action' => 'ajouter'));
+?>">Ajouter une nouvelle Clinique</a></p>
+
+
+<!--<form action="postIt" id="myform">-->
+
+<script type="text/javascript" >    
+    var structure = [ 
+        { field: 'idClinique', name: 'ID', width: '50px' },
+        { field: 'nomClinique', name : 'Nom', width: '100px' },
+        { field: 'proprietaireClinique', name : 'Proprietaire', width: '200px'},
+        { field: 'telClinique', name : 'Téléphone', width: '100px'},
+        { field: 'mailClinique', name : 'Mail', width: '200px'},
+        { field: 'Adresse_idAdresse', name : 'Adresse', width: '200px'}
+    ]; 
+</script>
+
+<span dojoType="dojox.data.QueryReadStore" jsId="idClinique" url="/v_esp/public/clinique/indexjson"></span>
+<div id="grid1" data-dojo-id="grid2" dojoType="dojox.grid.DataGrid" 
+     data-dojo-props="store:idClinique,
+     structure:'structure'  ,
+     clientSort:true,
+     rowSelector:'20px'"
+     style=" height: 260px;"></div>
+
+<div data-dojo-type="dijit/form/Form" id="modifier" data-dojo-id="myForm"
+     encType="multipart/form-data" action="clinique/modifier" method="GET">
+    <script type="dojo/on" data-dojo-event="submit">
+        dojo.require("dojo.NodeList-manipulate");
+        var items = grid2.selection.getSelected();
+        if(items.length){            
+            dojo.forEach(items, function(selectedItem){
+                if(selectedItem !== null){
+                    attribute = 'idClinique';
+                    var value = grid2.store.getValues(selectedItem, attribute);                    
+                    var idClinique = dojo.query("#idCliniqueM").val(value);
+                } 
+            }); 
+        }
+    </script>
+
+    <input type="hidden" id="idCliniqueM" name="idCliniqueM"  value="" />
+    <button data-dojo-type="dijit/form/Button"             
+            type="submit" >
+        Modifier
+    </button>
+
+    <button data-dojo-type="dijit/form/Button"             
+            type="button">
+        Supprimer
+        <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+            require(["dijit/registry"], function(registry){
+            registry.byId("dialog").show();
+            });
+        </script>
+    </button>
+
+    <div id="dialog" title="Suppression" data-dojo-id="dialog" data-dojo-type="dijit/Dialog">
+        <script type="dojo/on" data-dojo-event="show">            
+            dojo.require("dojo.NodeList-manipulate");
+            var items = grid2.selection.getSelected();
+            if(items.length){            
+                dojo.forEach(items, function(selectedItem){
+                    if(selectedItem !== null){
+                        var idClinique = grid2.store.getValues(selectedItem, 'idClinique');
+                        dojo.query("#idCliniqueS").val(idClinique);
+                        var detaille = idClinique + ' ';
+                        dojo.query("#detaille").html(detaille);                      
+                    } 
+                }); 
+            }
+        </script>
+        <p>Êtes-vous sûr de vouloir supprimer <div id="detaille"></div>
+        </p>
+        <form action="<?php echo $this->url(array('action' => 'supprimer')); ?>" method="post">
+            <div>
+                <input type="hidden" id ="idCliniqueS" name="idCliniqueS" value="" />
+                <button data-dojo-type="dijit/form/Button"  type="submit" name="supprimer" value="Oui">
+                    Oui
+                </button>
+                <button data-dojo-type="dijit/form/Button" 
+                        type="button" data-dojo-props="onClick:function(){dialog.hide();}"
+                        id="cancel" >Non</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<?php
+echo $this->contentPane()->captureEnd('tab1');
+echo $this->tabContainer()->captureEnd('tabcontainer');
+?>
+
+
+

@@ -1,0 +1,89 @@
+body{
+    background-color:#3CB371;
+}
+
+#masterLayout{
+}
+
+#menuPane{
+}
+#navPane{
+    text-align: center;
+}
+
+
+
+#mainPane{
+    margin-left: 10%;
+}
+
+#tabcontainer{
+    width: 80%;
+    height: 400px;
+}
+
+#statusPane{
+    clear: both;
+}
+
+
+
+
+.dijitTabInner.dijitTabContent.dijitTab.dijitTabChecked.dijitChecked{
+    background-color:#90EE90;
+}
+
+#tab1{
+    background-color:#90EE90;
+}
+
+/* Titre*/
+#titre{
+    text-align: center;
+    
+}
+#titreLien{
+    color: #ffffff;
+}
+
+/* Liens */
+a{
+    text-decoration:none;
+    text-transform:uppercase;
+    color: #000000;
+}
+
+/*Menu*/
+#nav{
+	/*width:960px;*/
+	margin:0 auto;/*centrage marges automatiques*/
+	padding:4px 0;
+        font-weight:bold;
+        color:#000000;
+	text-align:center;/*centre les inline qu'il contient*/
+        text-decoration:none;
+        text-transform:uppercase;
+}
+#nav li{
+    display:inline;/*de list-item à inline*/
+}
+#nav a{
+    display:inline-block;
+    margin-left:0px;
+    padding: 5px 10px;
+    background-color:#98FB98;
+}
+#nav a:hover, #nav a:active{
+    background-color:#3CB371;
+    color: #ffffff;
+}
+    
+/*article accueil*/
+article{
+    text-align: center;
+    color: #ffffff;
+}
+
+figure{
+    text-align: center;
+}
